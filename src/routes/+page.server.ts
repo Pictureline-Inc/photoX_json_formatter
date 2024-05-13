@@ -5,8 +5,11 @@ export async function load({ cookies }) {
 
 /** @type {import('./$types').Actions} */
 export const actions = {
-	formatJSON: async ({ cookies, request }) => {
-		console.log('Format JSON');
+	formatJSON: async ({ request }) => {
+		const data = await request.formData();
+		const body = Object.fromEntries(data);
+
+		console.log(body);
 
 		return { success: true };
 	}

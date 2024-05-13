@@ -2,7 +2,7 @@
 	import type { PhotoXDay, PhotoXJSON } from '$lib/.d.ts';
 
 	export let form;
-
+	const maxDays = 2;
 	const photoXDay: PhotoXDay = {
 		id: crypto.randomUUID(),
 		date: '',
@@ -12,6 +12,8 @@
 	$: jsonData = [photoXDay] as PhotoXJSON;
 
 	function addPhotoXDay() {
+		if (jsonData.length >= maxDays) return;
+
 		jsonData = [
 			...jsonData,
 			{
@@ -57,9 +59,11 @@
 					>
 						<legend class="sr-only">Day {i + 1}</legend>
 
-						<label class="form-control w-full max-w-xs">
+						<label for="{j.id}-eventDate-{i}" class="form-control w-full max-w-xs">
 							<span class="label-text mb-3">PhotoX Day - {i + 1}</span>
 							<input
+								name="{j.id}-eventDate-{i}"
+								id="{j.id}-eventDate-{i}"
 								type="datetime-local"
 								class="input input-sm rounded input-bordered w-full max-w-xs"
 							/>
@@ -75,6 +79,7 @@
 											<label for="{j.id}-event-{index}" class="form-control w-full flex-1">
 												<input
 													type="text"
+													name="{j.id}-eventLabel-{index}"
 													id="{j.id}-event-{index}"
 													placeholder="Event Label"
 													class="input input-sm input-bordered rounded w-full max-w-[300px]"
@@ -82,11 +87,20 @@
 											</label>
 
 											<label
+												for="{j.id}-event-time-{index}"
 												class="form-control w-full flex-row input-bordered rounded input input-sm flex-1"
 											>
-												<input type="datetime-local" class="w-full max-w-xs" />
+												<input
+													name="{j.id}-event_startDate-{index}"
+													type="datetime-local"
+													class="w-full max-w-xs"
+												/>
 												<div class="divider divider-horizontal"></div>
-												<input type="datetime-local" class="w-full max-w-xs" />
+												<input
+													name="{j.id}-event_endDate-{index}"
+													type="datetime-local"
+													class="w-full max-w-xs"
+												/>
 											</label>
 
 											<button
