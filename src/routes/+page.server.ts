@@ -2,10 +2,12 @@
 export const actions = {
 	formatJSON: async ({ request }) => {
 		const data = await request.formData();
-
-		const res = structureFD(data);
-
-		return { success: true };
+		try {
+			const json = structureFD(data);
+			return { success: true, json };
+		} catch (error) {
+			return { success: false, error };
+		}
 	}
 };
 
