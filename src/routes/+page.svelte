@@ -11,6 +11,17 @@
 
 	$: jsonData = [photoXDay] as PhotoXJSON;
 
+	function addPhotoXDay() {
+		jsonData = [
+			...jsonData,
+			{
+				id: crypto.randomUUID(),
+				date: '',
+				events: [{ label: '', time: [] }]
+			}
+		];
+	}
+
 	function addNestedEvent(id: string) {
 		jsonData = jsonData.map((day) => {
 			if (day.id === id) day.events.push({ label: '', time: [] });
@@ -32,17 +43,22 @@
 		<hgroup class="px-8 mb-4 flex justify-between items-center bg-base-300 py-4">
 			<h1 class="text-2xl font-medium">PhotoX JSON Formatter</h1>
 
-			<button type="button" class="btn btn-sm rounded" on:click={() => {}}> + Add Day </button>
+			<button type="button" class="btn btn-sm rounded" on:click={() => addPhotoXDay()}>
+				+ Add Day
+			</button>
 		</hgroup>
 
 		<form id="JSON_Formatter" method="POST" action="?/formatJSON" class="pb-4 px-8">
 			<section id="form_fields" class="mb-4">
 				{#each jsonData as j, i}
-					<fieldset id={j.id} class="bg-base-200 p-4 rounded outline outline-primary/30 shadow-md">
-						<legend class="sr-only">Day {i}</legend>
+					<fieldset
+						id={j.id}
+						class="bg-base-200 p-4 rounded outline outline-primary/30 shadow-md mb-4"
+					>
+						<legend class="sr-only">Day {i + 1}</legend>
 
 						<label class="form-control w-full max-w-xs">
-							<span class="label-text mb-3">PhotoX Day's Date</span>
+							<span class="label-text mb-3">PhotoX Day - {i + 1}</span>
 							<input
 								type="datetime-local"
 								class="input input-sm rounded input-bordered w-full max-w-xs"
@@ -54,7 +70,7 @@
 						<section class="ml-8">
 							<ol class="list-decimal">
 								{#each j.events as e, index}
-									<li class="pl-4">
+									<li class="pl-4 mb-4">
 										<div class="flex gap-4 items-center">
 											<label for="{j.id}-event-{index}" class="form-control w-full flex-1">
 												<input
