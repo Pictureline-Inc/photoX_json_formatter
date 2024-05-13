@@ -10,29 +10,31 @@ export const actions = {
 };
 
 function structureFD(data: FormData) {
-	const arr: unknown = [];
 	const tree: {
-		[key: string]: unknown;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		[key: string]: any;
 	} = {};
 
 	for (const [k, v] of data.entries()) {
 		const [id, label, index] = k.split('-');
-		console.log(id, label, index);
 
 		// Check if the day exists in the array
-		if (!tree[`Day-${id}`]) {
-			tree[`Day-${id}`] = {};
-		}
+		if (!tree[`Day-${id}`]) tree[`Day-${id}`] = {} as { [key: string]: unknown };
 
-		// Add date to the day object
+		// Add date to the day object & define events array
 		if (label === 'date') {
-			tree[`Day-${id}`]['date'] = v;
+			tree[`Day-${id}`].date = v;
+			tree[`Day-${id}`].events = [];
 		}
 
 		// Add events to the day object
+		if (label === 'label' && !tree[`Day-${id}`].events[index]) {
+			tree[`Day-${id}`].events[index] = {
+				label: v,
+				time: [data.get(`${id}-event_startDate-${index}`), data.get(`${id}-event_endDate-${index}`)]
+			};
+		
 	}
 
-	console.log(tree);
-	console.log(arr);
-	return arr;
+	return tree;
 }
