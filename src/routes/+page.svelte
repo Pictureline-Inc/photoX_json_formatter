@@ -1,10 +1,11 @@
 <script lang="ts">
 	import type { PhotoXDay, PhotoXJSON } from '$lib/.d.ts';
+	import { json } from '@sveltejs/kit';
 
 	export let form;
 	const maxDays = 2;
 	const photoXDay: PhotoXDay = {
-		id: crypto.randomUUID(),
+		id: 0,
 		date: '',
 		events: [{ label: '', time: [] }]
 	};
@@ -17,21 +18,21 @@
 		jsonData = [
 			...jsonData,
 			{
-				id: crypto.randomUUID(),
+				id: jsonData.length,
 				date: '',
 				events: [{ label: '', time: [] }]
 			}
 		];
 	}
 
-	function addNestedEvent(id: string) {
+	function addNestedEvent(id: number) {
 		jsonData = jsonData.map((day) => {
 			if (day.id === id) day.events.push({ label: '', time: [] });
 			return day;
 		});
 	}
 
-	function removeNestedEvent(id: string, index: number) {
+	function removeNestedEvent(id: number, index: number) {
 		jsonData = jsonData.map((day) => {
 			if (day.events.length === 1) return day;
 			if (day.id === id) day.events.splice(index, 1);
@@ -54,16 +55,16 @@
 			<section id="form_fields" class="mb-4">
 				{#each jsonData as j, i}
 					<fieldset
-						id={j.id}
+						id="day-{j.id}"
 						class="bg-base-200 p-4 rounded outline outline-primary/30 shadow-md mb-4"
 					>
 						<legend class="sr-only">Day {i + 1}</legend>
 
-						<label for="{j.id}-eventDate-{i}" class="form-control w-full max-w-xs">
+						<label for="{j.id}-date-{i}" class="form-control w-full max-w-xs">
 							<span class="label-text mb-3">PhotoX Day - {i + 1}</span>
 							<input
-								name="{j.id}-eventDate-{i}"
-								id="{j.id}-eventDate-{i}"
+								name="{j.id}-date-{i}"
+								id="{j.id}-date-{i}"
 								type="datetime-local"
 								class="input input-sm rounded input-bordered w-full max-w-xs"
 							/>
@@ -79,7 +80,7 @@
 											<label for="{j.id}-event-{index}" class="form-control w-full flex-1">
 												<input
 													type="text"
-													name="{j.id}-eventLabel-{index}"
+													name="{j.id}-label-{index}"
 													id="{j.id}-event-{index}"
 													placeholder="Event Label"
 													class="input input-sm input-bordered rounded w-full max-w-[300px]"

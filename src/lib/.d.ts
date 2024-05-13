@@ -1,5 +1,5 @@
 export type PhotoXDay = {
-	id: string;
+	id: number;
 	date: string;
 	events: {
 		label: string;
