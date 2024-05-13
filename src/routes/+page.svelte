@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { PhotoXDay, PhotoXJSON } from '$lib/.d.ts';
 
-	export let data;
 	export let form;
 
 	const photoXDay: PhotoXDay = {
@@ -14,24 +13,15 @@
 
 	function addNestedEvent(id: string) {
 		jsonData = jsonData.map((day) => {
-			if (day.id === id) {
-				day.events.push({ label: '', time: [] });
-			}
-
+			if (day.id === id) day.events.push({ label: '', time: [] });
 			return day;
 		});
 	}
 
 	function removeNestedEvent(id: string, index: number) {
 		jsonData = jsonData.map((day) => {
-			if (day.events.length === 1) {
-				return day;
-			}
-
-			if (day.id === id) {
-				day.events.splice(index, 1);
-			}
-
+			if (day.events.length === 1) return day;
+			if (day.id === id) day.events.splice(index, 1);
 			return day;
 		});
 	}
@@ -42,21 +32,21 @@
 		<hgroup class="px-8 mb-4 flex justify-between items-center bg-base-300 py-4">
 			<h1 class="text-2xl font-medium">PhotoX JSON Formatter</h1>
 
-			<button type="button" class="btn btn-sm" on:click={() => {}}> + Add Day </button>
+			<button type="button" class="btn btn-sm rounded" on:click={() => {}}> + Add Day </button>
 		</hgroup>
 
 		<form id="JSON_Formatter" method="POST" action="?/formatJSON" class="pb-4 px-8">
 			<section id="form_fields" class="mb-4">
 				{#each jsonData as j, i}
-					<fieldset
-						id={j.id}
-						class="bg-base-200 p-4 rounded-lg outline outline-primary/30 shadow-md"
-					>
+					<fieldset id={j.id} class="bg-base-200 p-4 rounded outline outline-primary/30 shadow-md">
 						<legend class="sr-only">Day {i}</legend>
 
 						<label class="form-control w-full max-w-xs">
 							<span class="label-text mb-3">PhotoX Day's Date</span>
-							<input type="datetime-local" class="input input-sm input-bordered w-full max-w-xs" />
+							<input
+								type="datetime-local"
+								class="input input-sm rounded input-bordered w-full max-w-xs"
+							/>
 						</label>
 
 						<div class="divider"></div>
@@ -71,12 +61,12 @@
 													type="text"
 													id="{j.id}-event-{index}"
 													placeholder="Event Label"
-													class="input input-sm input-bordered w-full max-w-[300px]"
+													class="input input-sm input-bordered rounded w-full max-w-[300px]"
 												/>
 											</label>
 
 											<label
-												class="form-control w-full flex-row input-bordered input input-sm flex-1"
+												class="form-control w-full flex-row input-bordered rounded input input-sm flex-1"
 											>
 												<input type="datetime-local" class="w-full max-w-xs" />
 												<div class="divider divider-horizontal"></div>
@@ -85,7 +75,7 @@
 
 											<button
 												type="button"
-												class="btn btn-ghost"
+												class="btn btn-ghost rounded-sm btn-sm"
 												on:click={() => removeNestedEvent(j.id, index)}
 											>
 												<svg
@@ -119,7 +109,7 @@
 			</section>
 
 			<footer class="flex justify-end">
-				<button class="btn btn-md btn-primary">Generate JSON</button>
+				<button class="btn btn-md btn-primary rounded">Generate JSON</button>
 			</footer>
 		</form>
 	</div>
