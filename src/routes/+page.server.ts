@@ -33,8 +33,8 @@ function structureFD(data: FormData) {
 				label: v,
 				time: [data.get(`${id}-event_startDate-${index}`), data.get(`${id}-event_endDate-${index}`)]
 			};
-		
-	}
+		}
 
-	return tree;
+		return tree;
+	}
 }

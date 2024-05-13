@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { PhotoXDay, PhotoXJSON } from '$lib/.d.ts';
-	import { json } from '@sveltejs/kit';
 
 	export let form;
 	const maxDays = 2;
@@ -14,7 +13,6 @@
 
 	function addPhotoXDay() {
 		if (jsonData.length >= maxDays) return;
-
 		jsonData = [
 			...jsonData,
 			{
@@ -46,9 +44,9 @@
 		<hgroup class="px-8 mb-4 flex justify-between items-center bg-base-300 py-4">
 			<h1 class="text-2xl font-medium">PhotoX JSON Formatter</h1>
 
-			<button type="button" class="btn btn-sm rounded" on:click={() => addPhotoXDay()}>
-				+ Add Day
-			</button>
+			<aside>
+				<button type="button" class="btn btn-sm rounded" on:click={() => {}}> Upload JSON </button>
+			</aside>
 		</hgroup>
 
 		<form id="JSON_Formatter" method="POST" action="?/formatJSON" class="pb-4 px-8">
@@ -56,8 +54,22 @@
 				{#each jsonData as j, i}
 					<fieldset
 						id="day-{j.id}"
-						class="bg-base-200 p-4 rounded outline outline-primary/30 shadow-md mb-4"
+						class="bg-base-200 relative p-4 rounded outline outline-primary/30 shadow-md mb-4"
 					>
+						<button
+							type="button"
+							disabled={jsonData.length === maxDays ? true : false}
+							class="btn btn-sm rounded absolute top-4 right-4"
+							on:click={() => {}}
+						>
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="w-4 fill-warning">
+								<!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+								<path
+									d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"
+								/>
+							</svg>
+						</button>
+
 						<legend class="sr-only">Day {i + 1}</legend>
 
 						<label for="{j.id}-date-{i}" class="form-control w-full max-w-xs">
@@ -139,8 +151,16 @@
 				{/each}
 			</section>
 
-			<footer class="flex justify-end">
-				<button class="btn btn-md btn-primary rounded">Generate JSON</button>
+			<footer class="flex justify-between items-center">
+				<button
+					type="button"
+					disabled={jsonData.length === maxDays ? true : false}
+					class="btn btn-sm rounded"
+					on:click={() => addPhotoXDay()}
+				>
+					+ Add Day
+				</button>
+				<button class="btn btn-sm btn-primary rounded">Generate JSON</button>
 			</footer>
 		</form>
 	</div>
