@@ -64,9 +64,21 @@
 		});
 	}
 
+	const dateFormatter = () => {
+		jsonData = jsonData.map((day) => {
+			day.date = new Date(day.date).toISOString();
+			day.events = day.events.map((event) => {
+				event.time = event.time.map((time) => new Date(time).toISOString());
+				return event;
+			});
+			return day;
+		});
+	};
+
 	function formEnhance({ formElement, formData, action, cancel, submitter }) {
 		formData = new FormData();
 		formData.append('jsonData', JSON.stringify(jsonString, null, 4));
+		dateFormatter(); // Format date to ISO
 		return async ({ result, update }) => {
 			update({ ok: true });
 		};
