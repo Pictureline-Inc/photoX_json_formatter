@@ -3,14 +3,20 @@ export const actions = {
 	formatJSON: async ({ request }) => {
 		const data = await request.formData();
 		try {
-			const json = structureFD(data);
-			return { success: true, json };
+			console.log(data);
+			return { ok: true, json: JSON.stringify(data) };
 		} catch (error) {
-			return { success: false, error };
+			return { ok: false, error };
 		}
 	}
 };
 
+/**
+ * Structure FormData into a JSON object
+ * @deprecated This function is not used in the current implementation
+ * @param data FormData
+ * @returns {object}
+ */
 function structureFD(data: FormData) {
 	const tree: {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -36,7 +42,7 @@ function structureFD(data: FormData) {
 				time: [data.get(`${id}-event_startDate-${index}`), data.get(`${id}-event_endDate-${index}`)]
 			};
 		}
-
-		return tree;
 	}
+
+	return tree;
 }
