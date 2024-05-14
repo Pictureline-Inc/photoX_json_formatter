@@ -75,11 +75,11 @@
 		});
 	};
 
-	function formEnhance({ formElement, formData, action, cancel, submitter }) {
+	function formEnhance({ formElement, formData, action, cancel, submitter }: any) {
 		formData = new FormData();
 		formData.append('jsonData', JSON.stringify(jsonString, null, 4));
 		dateFormatter(); // Format date to ISO
-		return async ({ result, update }) => {
+		return async ({ result, update }: any) => {
 			update({ ok: true });
 		};
 	}
@@ -89,11 +89,6 @@
 	<div class="bg-neutral rounded-lg overflow-hidden max-w-4xl mx-auto">
 		<hgroup class="px-8 flex justify-between items-center bg-base-300 py-4">
 			<h1 class="text-2xl font-medium">PhotoX JSON Formatter</h1>
-
-			<aside>
-				<button type="button" class="btn btn-sm rounded" on:click={() => {}}> Create JSON</button>
-				<button type="button" class="btn btn-sm rounded" on:click={() => {}}> Upload JSON </button>
-			</aside>
 		</hgroup>
 
 		{#if !form?.ok}
