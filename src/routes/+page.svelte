@@ -86,9 +86,15 @@
 </script>
 
 <section>
-	<div class="bg-neutral rounded-lg overflow-hidden max-w-4xl mx-auto">
+	<div class="bg-neutral rounded-lg overflow-hidden max-w-4xl mx-auto shadow-md">
 		<hgroup class="px-8 flex justify-between items-center bg-base-300 py-4">
 			<h1 class="text-2xl font-medium">PhotoX JSON Formatter</h1>
+
+			<button id="menu-toggle" popovertarget="menu-items"> Open Menu </button>
+			<ul id="menu-items" popover anchor="menu-toggle">
+				<li class="item">...</li>
+				<li class="item">...</li>
+			</ul>
 		</hgroup>
 
 		{#if !form?.ok}
@@ -99,11 +105,11 @@
 				class="p-8"
 				use:enhance={formEnhance}
 			>
-				<section id="form_fields" class="mb-4">
+				<section id="form_fields" class="mb-8">
 					{#each jsonData as j, i}
 						<fieldset
 							id="day-{j.id}"
-							class="bg-base-200 relative p-4 rounded outline outline-primary/30 shadow-md mb-4"
+							class="bg-base-200 relative p-4 rounded outline outline-primary/50 shadow-md mb-4"
 						>
 							<button
 								type="button"
@@ -116,7 +122,7 @@
 							<legend class="sr-only">Day {i + 1}</legend>
 
 							<label for="{j.id}-date-{i}" class="form-control w-full max-w-xs">
-								<span class="label-text mb-3">PhotoX Day - {i + 1}</span>
+								<span class="label-text mb-3 text-lg font-medium">PhotoX Day - {i + 1}</span>
 								<input
 									name="{j.id}-date-{i}"
 									id="{j.id}-date-{i}"
@@ -128,10 +134,10 @@
 
 							<div class="divider"></div>
 
-							<section class="ml-8">
+							<section class="max-h-56 overflow-y-auto overflow-x-hidden pl-8 pt-1">
 								<ol class="list-decimal">
 									{#each j.events as e, index}
-										<li class="pl-4 mb-4">
+										<li class="mb-4 pl-4">
 											<div class="flex gap-4 items-center">
 												<label for="{j.id}-event-{index}" class="form-control w-full flex-1">
 													<input
@@ -150,14 +156,14 @@
 												>
 													<input
 														name="{j.id}-event_startDate-{index}"
-														type="datetime-local"
+														type="time"
 														bind:value={e.time[0]}
 														class="w-full max-w-xs"
 													/>
 													<div class="divider divider-horizontal"></div>
 													<input
 														name="{j.id}-event_endDate-{index}"
-														type="datetime-local"
+														type="time"
 														bind:value={e.time[1]}
 														class="w-full max-w-xs"
 													/>
@@ -184,10 +190,10 @@
 									{/each}
 								</ol>
 
-								<div class="mt-4">
+								<div class="mt-6">
 									<button
 										type="button"
-										class="btn btn-sm btn-outline rounded"
+										class="btn btn-xs btn-outline rounded"
 										on:click={() => addNestedEvent(j.id)}
 									>
 										+ Add Event
@@ -230,3 +236,11 @@
 		{/if}
 	</div>
 </section>
+
+<style>
+	#menu-items {
+		bottom: anchor(bottom);
+		left: anchor(center);
+		translate: -50% 0;
+	}
+</style>
