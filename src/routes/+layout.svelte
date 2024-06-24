@@ -18,7 +18,7 @@
 				<a href="/" class:bg-black={currentRoute === '/'}>Create JSON</a>
 			</li>
 			<li>
-				<a href="/recents" class:bg-black={currentRoute === 'recents'}>Recent JSON</a>
+				<a href="/recents" class:bg-black={currentRoute === '/recents'}>Recent JSON</a>
 			</li>
 			<li>
 				<details>
