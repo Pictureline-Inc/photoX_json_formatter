@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import type { PhotoXDay, PhotoXJSON } from '$lib/.d.ts';
+	import { json } from '@sveltejs/kit';
 
 	export let form;
 	const maxDays = 2;
@@ -68,7 +69,13 @@
 		jsonData = jsonData.map((day) => {
 			day.date = new Date(day.date).toISOString();
 			day.events = day.events.map((event) => {
-				event.time = event.time.map((time) => new Date(time).toISOString());
+				event.time = event.time.map((time) => {
+					const [hours, minutes] = time.split(':');
+					const hoursInt = parseInt(hours);
+					const period = hoursInt >= 12 ? 'PM' : 'AM';
+					const adjustedHours = hoursInt % 12 === 0 ? 12 : hoursInt % 12; // Adjust hours to 12-hour format
+					return `${adjustedHours}:${minutes} ${period}`;
+				});
 				return event;
 			});
 			return day;
@@ -89,12 +96,6 @@
 	<div class="bg-neutral rounded-lg overflow-hidden max-w-4xl mx-auto shadow-md">
 		<hgroup class="px-8 flex justify-between items-center bg-base-300 py-4">
 			<h1 class="text-2xl font-medium">PhotoX JSON Formatter</h1>
-
-			<button id="menu-toggle" popovertarget="menu-items"> Open Menu </button>
-			<ul id="menu-items" popover anchor="menu-toggle">
-				<li class="item">...</li>
-				<li class="item">...</li>
-			</ul>
 		</hgroup>
 
 		{#if !form?.ok}
