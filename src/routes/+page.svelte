@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { goto } from '$app/navigation';
 	import type { PhotoXDay, PhotoXJSON } from '$lib/.d.ts';
 
 	export let form;
@@ -88,7 +89,7 @@
 		formData.append('jsonData.data', JSON.stringify(jsonString, null, 4));
 		dateFormatter(); // Format date to ISO
 		return async ({ _, update }: any) => {
-			update({ ok: true });
+			// update({ ok: true });
 			// Get current JSON Structs from local storage
 			const currentJSONStructs = JSON.parse(localStorage.getItem('photoXJSON') || '[]');
 			// Save JSON struct to array of JSON Structs to local storage and replace the JSON struct with the same id
@@ -97,7 +98,8 @@
 			} else {
 				localStorage.setItem('photoXJSON', JSON.stringify([...currentJSONStructs, jsonData]));
 			}
-			console.log(JSON.parse(localStorage.getItem('photoXJSON') || '[]'));
+			// Redirect to the recents page
+			await goto(`/recents/${jsonData.name}`);
 		};
 	}
 </script>
