@@ -9,12 +9,22 @@
 	});
 </script>
 
-<section>
-	<hgroup class="mb-4">
+<section class="max-w-[1000px]">
+	<hgroup class="mb-4 flex justify-between items-center">
 		<h1 class="text-2xl font-medium">Recently Created Schedules</h1>
+		<button
+			class="btn btn-neutral"
+			disabled={recents.length === 0}
+			on:click={() => {
+				localStorage.removeItem('photoXJSON');
+				recents = [];
+			}}
+		>
+			Clear
+		</button>
 	</hgroup>
 
-	<div class="overflow-x-auto max-w-[1000px]">
+	<div class="overflow-x-auto">
 		{#if recents.length > 0}
 			<table class="table bg-neutral rounded-lg">
 				<!-- head -->
