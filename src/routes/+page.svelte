@@ -1,25 +1,29 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import type { PhotoXDay, PhotoXJSON } from '$lib/.d.ts';
-	import { json } from '@sveltejs/kit';
 
 	export let form;
 	const maxDays = 2;
 	const photoXDay: PhotoXDay = {
 		id: 0,
+		name: '',
 		date: '',
 		events: [{ label: '', time: [] }]
 	};
 
-	$: jsonData = [photoXDay] as PhotoXJSON;
+	$: jsonData = {
+		name: '',
+		data: [photoXDay]
+	} as PhotoXJSON;
 	$: jsonString = JSON.stringify(jsonData, null, 2);
 
 	function addPhotoXDay() {
-		if (jsonData.length >= maxDays) return;
-		jsonData = [
-			...jsonData,
+		if (jsonData.data.length >= maxDays) return;
+		jsonData.data = [
+			...jsonData.data,
 			{
-				id: jsonData.length,
+				id: jsonData.data.length,
+				name: '',
 				date: '',
 				events: [{ label: '', time: [] }]
 			}
@@ -27,14 +31,14 @@
 	}
 
 	function addNestedEvent(id: number) {
-		jsonData = jsonData.map((day) => {
+		jsonData.data = jsonData.data.map((day) => {
 			if (day.id === id) day.events.push({ label: '', time: [] });
 			return day;
 		});
 	}
 
 	function removeNestedEvent(id: number, index: number) {
-		jsonData = jsonData.map((day) => {
+		jsonData.data = jsonData.data.map((day) => {
 			if (day.events.length === 1) return day;
 			if (day.id === id) day.events.splice(index, 1);
 			return day;
@@ -42,7 +46,7 @@
 	}
 
 	function resetDay(id: number) {
-		jsonData = jsonData.map((day) => {
+		jsonData.data = jsonData.data.map((day) => {
 			if (day.id === id) {
 				day.date = '';
 				day.events = [{ label: '', time: [] }];
@@ -66,7 +70,7 @@
 	}
 
 	const dateFormatter = () => {
-		jsonData = jsonData.map((day) => {
+		jsonData.data = jsonData.data.map((day) => {
 			day.date = new Date(day.date).toISOString();
 			day.events = day.events.map((event) => {
 				event.time = event.time.map((time) => {
@@ -83,10 +87,19 @@
 
 	function formEnhance({ formElement, formData, action, cancel, submitter }: any) {
 		formData = new FormData();
-		formData.append('jsonData', JSON.stringify(jsonString, null, 4));
+		formData.append('jsonData.data', JSON.stringify(jsonString, null, 4));
 		dateFormatter(); // Format date to ISO
-		return async ({ result, update }: any) => {
+		return async ({ _, update }: any) => {
 			update({ ok: true });
+			// Get current JSON Structs from local storage
+			const currentJSONStructs = JSON.parse(localStorage.getItem('photoXJSON') || '[]');
+			// Save JSON struct to array of JSON Structs to local storage and replace the JSON struct with the same id
+			if (!currentJSONStructs || currentJSONStructs.length === 0) {
+				localStorage.setItem('photoXJSON', JSON.stringify([jsonData]));
+			} else {
+				localStorage.setItem('photoXJSON', JSON.stringify([...currentJSONStructs, jsonData]));
+			}
+			console.log(JSON.parse(localStorage.getItem('photoXJSON') || '[]'));
 		};
 	}
 </script>
@@ -102,11 +115,26 @@
 				id="JSON_Formatter"
 				method="POST"
 				action="?/formatJSON"
-				class="p-8"
+				class="p-6"
 				use:enhance={formEnhance}
 			>
+				<section class="mb-4">
+					<label for="photox_name">
+						<span class="sr-only">PhotoX Event Name</span>
+						<input
+							type="text"
+							name="photox_name"
+							id="photox_name"
+							required
+							bind:value={jsonData.name}
+							placeholder="PhotoX Event Name (Unique Name)"
+							class="input rounded input-bordered w-full max-w-xs"
+						/>
+					</label>
+				</section>
+
 				<section id="form_fields" class="mb-8">
-					{#each jsonData as j, i}
+					{#each jsonData.data as j, i}
 						<fieldset
 							id="day-{j.id}"
 							class="bg-base-200 relative p-4 rounded outline outline-primary/50 shadow-md mb-4"
@@ -128,6 +156,7 @@
 									id="{j.id}-date-{i}"
 									type="datetime-local"
 									bind:value={j.date}
+									required
 									class="input input-sm rounded input-bordered w-full max-w-xs"
 								/>
 							</label>
@@ -145,6 +174,7 @@
 														name="{j.id}-label-{index}"
 														id="{j.id}-event-{index}"
 														bind:value={e.label}
+														required
 														placeholder="Event Label"
 														class="input input-sm input-bordered rounded w-full max-w-[300px]"
 													/>
@@ -157,6 +187,7 @@
 													<input
 														name="{j.id}-event_startDate-{index}"
 														type="time"
+														required
 														bind:value={e.time[0]}
 														class="w-full max-w-xs"
 													/>
@@ -164,6 +195,7 @@
 													<input
 														name="{j.id}-event_endDate-{index}"
 														type="time"
+														required
 														bind:value={e.time[1]}
 														class="w-full max-w-xs"
 													/>
@@ -207,7 +239,7 @@
 				<footer class="flex justify-between items-center">
 					<button
 						type="button"
-						disabled={jsonData.length === maxDays ? true : false}
+						disabled={jsonData.data.length === maxDays ? true : false}
 						class="btn btn-sm rounded"
 						on:click={() => addPhotoXDay()}
 					>
