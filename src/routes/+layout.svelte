@@ -1,17 +1,24 @@
 <script lang="ts">
 	import '../app.css';
+	import { page } from '$app/stores';
+
+	$: currentRoute = $page.route.id;
 </script>
 
-<div class="navbar bg-base-100 max-w-[1400px] mx-auto">
-	<div class="flex-1">
+<div class="bg-base-200 h-screen min-w-56 p-2">
+	<div>
 		<a href="https://www.pictureline.com" class="btn btn-ghost text-2xl" target="_blank">
 			<img src="/pline-logo.svg" alt="Pictureline Wordmark" />
 		</a>
 	</div>
+
 	<div class="flex-none">
-		<ul class="menu menu-horizontal px-1">
+		<ul class="menu menu-vertical">
 			<li>
-				<a href="/">Create JSON</a>
+				<a href="/" class:bg-black={currentRoute === '/'}>Create JSON</a>
+			</li>
+			<li>
+				<a href="/recents" class:bg-black={currentRoute === 'recents'}>Recent JSON</a>
 			</li>
 			<li>
 				<details>
