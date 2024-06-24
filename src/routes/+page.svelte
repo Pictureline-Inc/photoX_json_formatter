@@ -70,11 +70,10 @@
 			day.date = new Date(day.date).toISOString();
 			day.events = day.events.map((event) => {
 				event.time = event.time.map((time) => {
-					const [hours, minutes] = time.split(':');
-					const hoursInt = parseInt(hours);
-					const period = hoursInt >= 12 ? 'PM' : 'AM';
-					const adjustedHours = hoursInt % 12 === 0 ? 12 : hoursInt % 12; // Adjust hours to 12-hour format
-					return `${adjustedHours}:${minutes} ${period}`;
+					const datePart = day.date.split('T')[0]; // Extract the date part from the ISO date
+					const dateTimeString = `${datePart}T${time}:00.000Z`; // Combine date and time
+					const isoString = new Date(dateTimeString).toISOString();
+					return isoString;
 				});
 				return event;
 			});
@@ -93,7 +92,7 @@
 </script>
 
 <section>
-	<div class="bg-neutral rounded-lg overflow-hidden max-w-3xl w-full shadow-md">
+	<div class="bg-neutral rounded-lg overflow-hidden max-w-3xl mx-auto w-full shadow-md">
 		<hgroup class="px-8 flex justify-between items-center bg-base-300 py-4">
 			<h1 class="text-2xl font-medium">PhotoX JSON Formatter</h1>
 		</hgroup>
@@ -218,7 +217,7 @@
 				</footer>
 			</form>
 		{:else}
-			<div class="p-8 relative">
+			<div class="p-8 pr-0 relative">
 				<div
 					class="tooltip absolute top-4 right-4 tooltip-primary"
 					data-tip={!coppied ? 'Copy JSON' : 'Coppied'}
@@ -232,7 +231,9 @@
 						</svg>
 					</button>
 				</div>
-				<pre><code id="JSON_STRING">{jsonString}</code></pre>
+				<div class="overflow-y-auto max-h-[450px]">
+					<pre><code id="JSON_STRING">{jsonString}</code></pre>
+				</div>
 			</div>
 		{/if}
 	</div>
