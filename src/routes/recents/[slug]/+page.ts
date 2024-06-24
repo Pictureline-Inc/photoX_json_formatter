@@ -1,11 +1,15 @@
-import type { PhotoXDay } from '$lib/.js';
 import { error } from '@sveltejs/kit';
+import { browser } from '$app/environment';
 
 /** @type {import('./$types').PageLoad} */
 export function load({ params }) {
+	if (!browser) return;
+
 	const [photoXJSON] = JSON.parse(localStorage.getItem('photoXJSON') || '[]').filter(
-		(item: PhotoXDay) => item.name === params.slug
+		(item) => item.name === params.slug
 	);
+
+	console.log(photoXJSON);
 
 	if (photoXJSON) {
 		return photoXJSON;

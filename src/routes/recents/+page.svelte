@@ -3,7 +3,6 @@
 	import { onMount } from 'svelte';
 
 	$: recents = [] as any[];
-	$: console.log(recents);
 
 	onMount(() => {
 		recents = JSON.parse(localStorage.getItem('photoXJSON') || '[]');
@@ -47,13 +46,6 @@
 							</td>
 						</tr>
 					{/each}
-					<!-- row 1
-					<tr>
-						<th>1</th>
-						<td>Cy Ganderton</td>
-						<td>Quality Control Specialist</td>
-						<td>Blue</td>
-					</tr> -->
 				</tbody>
 			</table>
 		{:else}

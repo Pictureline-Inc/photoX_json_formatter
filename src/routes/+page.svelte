@@ -6,7 +6,6 @@
 	const maxDays = 2;
 	const photoXDay: PhotoXDay = {
 		id: 0,
-		name: '',
 		date: '',
 		events: [{ label: '', time: [] }]
 	};
@@ -23,7 +22,6 @@
 			...jsonData.data,
 			{
 				id: jsonData.data.length,
-				name: '',
 				date: '',
 				events: [{ label: '', time: [] }]
 			}
