@@ -38,6 +38,6 @@
 </div>
 
 <!-- Slot -->
-<main class="max-w-7xl mx-auto px-8 2xl:px-0 pt-4">
+<main class="p-8 w-full">
 	<slot />
 </main>

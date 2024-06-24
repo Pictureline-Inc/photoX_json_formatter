@@ -93,7 +93,7 @@
 </script>
 
 <section>
-	<div class="bg-neutral rounded-lg overflow-hidden max-w-4xl mx-auto shadow-md">
+	<div class="bg-neutral rounded-lg overflow-hidden max-w-3xl w-full shadow-md">
 		<hgroup class="px-8 flex justify-between items-center bg-base-300 py-4">
 			<h1 class="text-2xl font-medium">PhotoX JSON Formatter</h1>
 		</hgroup>
