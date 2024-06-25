@@ -2,6 +2,10 @@
 	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
 	import type { PhotoXDay, PhotoXJSON } from '$lib/.d.ts';
+	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
+
+	$: editParam = $page.url.searchParams.get('editJSON') as string;
 
 	export let form;
 	const maxDays = 2;
@@ -102,6 +106,14 @@
 			await goto(`/recents/${jsonData.name}`);
 		};
 	}
+
+	onMount(() => {
+		// Checking for local storage
+		if (JSON.parse(editParam)) {
+			const storedJSON = JSON.parse(localStorage.getItem('jsonToBeEdited') || '[]');
+			jsonData = storedJSON;
+		}
+	});
 </script>
 
 <section>

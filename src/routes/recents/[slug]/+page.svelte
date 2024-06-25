@@ -18,7 +18,7 @@
 
 	async function editJSON() {
 		$jsonToBeEdited = data;
-		// await goto('/?editJSON=true');
+		await goto('/?editJSON=true');
 	}
 </script>
 
