@@ -1,12 +1,29 @@
 <script lang="ts">
+	$: jsonPresent = false; // State managment for UI
 	$: jsonSTR = '';
 	$: jsonFile = undefined;
-	$: jsonPresent = false;
+	$: errorMessage = '';
 
 	$: if (jsonFile || jsonSTR) {
 		jsonPresent = true;
 	} else {
 		jsonPresent = false;
+	}
+
+	$: if (jsonSTR) {
+		try {
+			JSON.parse(jsonSTR);
+		} catch (error) {
+			errorMessage = 'Invalid JSON';
+			jsonPresent = false;
+		}
+	} else {
+		errorMessage = '';
+	}
+
+	function handleJSONParse() {
+		console.log('Parsing JSON');
+		console.log(jsonFile, jsonSTR);
 	}
 </script>
 
@@ -21,7 +38,7 @@
 				<label for="jsonString" class="w-full">
 					<span class="sr-only">JSON String</span>
 					<textarea
-						class="textarea textarea-primary resize-none w-full"
+						class="textarea textarea-primary resize-none w-full overflow-auto"
 						placeholder="Paste JSON text here..."
 						rows="20"
 						name="jsonString"
@@ -46,9 +63,20 @@
 			</div>
 		</section>
 
-		<footer class="self-end mt-8">
-			<button class="btn btn-link">Cancel</button>
-			<button class="btn btn-primary" disabled={!jsonPresent}>Start Editing</button>
+		<footer class="mt-8 flex justify-between items-center">
+			<aside>
+				{#if errorMessage}
+					<span class="font-medium text-error">
+						{errorMessage}
+					</span>
+				{/if}
+			</aside>
+			<aside>
+				<button class="btn btn-link">Cancel</button>
+				<button class="btn btn-primary" on:click={handleJSONParse} disabled={!jsonPresent}>
+					Start Editing
+				</button>
+			</aside>
 		</footer>
 	</div>
 </section>
