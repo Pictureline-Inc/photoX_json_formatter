@@ -1,9 +1,9 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { jsonToBeEdited } from '$lib';
+	import type { PhotoXJSON } from '$lib/.d.ts';
 
-	export let data;
-
-	$: console.log(data);
+	export let data: PhotoXJSON;
 
 	$: coppied = false;
 
@@ -16,9 +16,9 @@
 		});
 	}
 
-	function editJSON() {
-		console.log(data);
-		console.log($jsonToBeEdited);
+	async function editJSON() {
+		$jsonToBeEdited = data;
+		// await goto('/?editJSON=true');
 	}
 </script>
 
