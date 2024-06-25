@@ -116,7 +116,7 @@
 			const currentJSONStructs = JSON.parse(localStorage.getItem('photoXJSON') || '[]');
 
 			if (edit) {
-				const updatedJSONStruct = currentJSONStructs.map((s, i) => {
+				const updatedJSONStruct = currentJSONStructs.map((s: any, i: number) => {
 					if (s.id === jsonData.id) {
 						return JSON.parse(jsonString);
 					}
