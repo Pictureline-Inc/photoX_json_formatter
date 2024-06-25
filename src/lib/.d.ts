@@ -9,6 +9,7 @@ export type PhotoXDay = {
 };
 
 export type PhotoXJSON = {
+	id: string;
 	name: string;
 	data: PhotoXDay[];
 };

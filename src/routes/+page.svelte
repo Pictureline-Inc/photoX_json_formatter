@@ -17,6 +17,7 @@
 
 	$: edit = false;
 	$: jsonData = {
+		id: crypto.randomUUID(),
 		name: '',
 		data: [photoXDay]
 	} as PhotoXJSON;
@@ -109,21 +110,30 @@
 		formData.append('jsonData.data', JSON.stringify(jsonString, null, 4));
 		dateFormatter(); // Format date to ISO
 		return async ({ _, update }: any) => {
-			console.log(jsonString);
 			// update({ ok: true });
 
 			// Get current JSON Structs from local storage
-			// const currentJSONStructs = JSON.parse(localStorage.getItem('photoXJSON') || '[]');
+			const currentJSONStructs = JSON.parse(localStorage.getItem('photoXJSON') || '[]');
 
-			// // Save JSON struct to array of JSON Structs to local storage and replace the JSON struct with the same id
-			// if (!currentJSONStructs || currentJSONStructs.length === 0) {
-			// 	localStorage.setItem('photoXJSON', JSON.stringify([jsonData]));
-			// } else {
-			// 	localStorage.setItem('photoXJSON', JSON.stringify([...currentJSONStructs, jsonData]));
-			// }
+			if (edit) {
+				const updatedJSONStruct = currentJSONStructs.map((s, i) => {
+					if (s.id === jsonData.id) {
+						return JSON.parse(jsonString);
+					}
+					return s;
+				});
+				localStorage.setItem('photoXJSON', JSON.stringify(updatedJSONStruct));
+			} else {
+				// Save JSON struct to array of JSON Structs to local storage and replace the JSON struct with the same id
+				if (!currentJSONStructs || currentJSONStructs.length === 0) {
+					localStorage.setItem('photoXJSON', JSON.stringify([jsonData]));
+				} else {
+					localStorage.setItem('photoXJSON', JSON.stringify([...currentJSONStructs, jsonData]));
+				}
+			}
 
-			// // Redirect to the recents page
-			// await goto(`/recents/${jsonData.name}`);
+			// Redirect to the recents page
+			await goto(`/recents/${jsonData.name}`);
 		};
 	}
 
@@ -135,8 +145,6 @@
 			edit = true;
 			inputDateFormatter(); // Format date from ISO to normal value input standard
 		}
-
-		console.log(jsonData);
 	});
 </script>
 
