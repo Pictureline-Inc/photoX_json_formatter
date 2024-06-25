@@ -9,8 +9,6 @@ export function load({ params }) {
 		(item) => item.name === params.slug
 	);
 
-	console.log(photoXJSON);
-
 	if (photoXJSON) {
 		return photoXJSON;
 	}
