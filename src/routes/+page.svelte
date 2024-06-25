@@ -89,22 +89,42 @@
 		});
 	};
 
+	const inputDateFormatter = () => {
+		jsonData.data = jsonData.data.map((day) => {
+			day.date = day.date.replace(':00.000Z', '');
+			day.events = day.events.map((event) => {
+				event.time = event.time.map((time) => {
+					const isoString = time.replace(':00.000Z', '');
+					const date = new Date(isoString);
+					const timeString = date.toTimeString().split(' ')[0];
+					return timeString;
+				});
+				return event;
+			});
+			return day;
+		});
+	};
+
 	function formEnhance({ formElement, formData, action, cancel, submitter }: any) {
 		formData = new FormData();
 		formData.append('jsonData.data', JSON.stringify(jsonString, null, 4));
 		dateFormatter(); // Format date to ISO
 		return async ({ _, update }: any) => {
+			console.log(jsonString);
 			// update({ ok: true });
+
 			// Get current JSON Structs from local storage
-			const currentJSONStructs = JSON.parse(localStorage.getItem('photoXJSON') || '[]');
-			// Save JSON struct to array of JSON Structs to local storage and replace the JSON struct with the same id
-			if (!currentJSONStructs || currentJSONStructs.length === 0) {
-				localStorage.setItem('photoXJSON', JSON.stringify([jsonData]));
-			} else {
-				localStorage.setItem('photoXJSON', JSON.stringify([...currentJSONStructs, jsonData]));
-			}
-			// Redirect to the recents page
-			await goto(`/recents/${jsonData.name}`);
+			// const currentJSONStructs = JSON.parse(localStorage.getItem('photoXJSON') || '[]');
+
+			// // Save JSON struct to array of JSON Structs to local storage and replace the JSON struct with the same id
+			// if (!currentJSONStructs || currentJSONStructs.length === 0) {
+			// 	localStorage.setItem('photoXJSON', JSON.stringify([jsonData]));
+			// } else {
+			// 	localStorage.setItem('photoXJSON', JSON.stringify([...currentJSONStructs, jsonData]));
+			// }
+
+			// // Redirect to the recents page
+			// await goto(`/recents/${jsonData.name}`);
 		};
 	}
 
@@ -114,7 +134,53 @@
 			const storedJSON = JSON.parse(localStorage.getItem('jsonToBeEdited') || '[]');
 			jsonData = storedJSON;
 			edit = true;
+			inputDateFormatter(); // Format date from ISO to normal value input standard
+
+			/**
+			 * {
+  "name": "test",
+  "data": [
+    {
+      "id": 0,
+      "date": "2024-06-26T14:53",
+      "events": [
+        {
+          "label": "test",
+          "time": [
+            "15:53",
+            "17:53"
+          ],
+          "photowalk": false
+        }
+      ]
+    }
+  ]
+}
+			*/
 		}
+		/**
+		 * {
+  "name": "test",
+  "data": [
+    {
+      "id": 0,
+      "date": "2024-06-25T20:56:00.000Z",
+      "events": [
+        {
+          "label": "test",
+          "time": [
+            "2024-06-25T15:56:00.000Z",
+            "2024-06-25T16:57:00.000Z"
+          ],
+          "photowalk": false
+        }
+      ]
+    }
+  ]
+}
+		*/
+
+		console.log(jsonData);
 	});
 </script>
 
@@ -165,6 +231,7 @@
 
 							<label for="{j.id}-date-{i}" class="form-control w-full max-w-xs">
 								<span class="label-text mb-3 text-lg font-medium">PhotoX Day - {i + 1}</span>
+
 								<input
 									name="{j.id}-date-{i}"
 									id="{j.id}-date-{i}"
