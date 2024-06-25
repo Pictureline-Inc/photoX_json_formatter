@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+	import { jsonToBeEdited } from '$lib';
+
 	$: jsonPresent = false; // State managment for UI
 	$: jsonSTR = '';
 	$: jsonFile = undefined;
@@ -21,9 +24,23 @@
 		errorMessage = '';
 	}
 
-	function handleJSONParse() {
-		console.log('Parsing JSON');
-		console.log(jsonFile, jsonSTR);
+	async function handleJSONParse() {
+		if (jsonSTR) {
+			const json = JSON.parse(jsonSTR);
+			$jsonToBeEdited = json;
+		}
+
+		if (jsonFile) {
+			const file = jsonFile[0];
+			const reader = new FileReader();
+			reader.onload = (e: any) => {
+				const json = JSON.parse(e.target.result);
+				$jsonToBeEdited = json;
+			};
+			reader.readAsText(file);
+		}
+
+		await goto('/?uploadJSON=true');
 	}
 </script>
 
@@ -43,6 +60,10 @@
 						rows="20"
 						name="jsonString"
 						id="jsonString"
+						disabled={jsonFile}
+						on:change={() => {
+							jsonFile = undefined;
+						}}
 						bind:value={jsonSTR}
 					></textarea>
 				</label>
@@ -57,7 +78,12 @@
 						type="file"
 						class="file-input file-input-bordered file-input-primary w-full h-20"
 						accept=".json"
-						bind:value={jsonFile}
+						multiple={false}
+						disabled={jsonSTR ? true : false}
+						on:change={() => {
+							jsonSTR = '';
+						}}
+						bind:files={jsonFile}
 					/>
 				</label>
 			</div>
@@ -80,33 +106,3 @@
 		</footer>
 	</div>
 </section>
-
-<!-- 
-{
-  "name": "Test",
-  "data": [
-    {
-      "id": 0,
-      "date": "2024-06-25T17:45:00.000Z",
-      "events": [
-        {
-          "label": "test",
-          "time": [
-            "2024-06-25T12:45:00.000Z",
-            "2024-06-25T12:45:00.000Z"
-          ],
-          "photowalk": false
-        },
-        {
-          "label": "teata",
-          "time": [
-            "2024-06-25T13:45:00.000Z",
-            "2024-06-25T13:45:00.000Z"
-          ],
-          "photowalk": true
-        }
-      ]
-    }
-  ]
-}
--->

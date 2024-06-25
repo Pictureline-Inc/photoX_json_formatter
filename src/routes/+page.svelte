@@ -5,7 +5,8 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 
-	$: editParam = $page.url.searchParams.get('editJSON') as string;
+	$: editJSON = $page.url.searchParams.get('editJSON') as string;
+	$: uploadJSON = $page.url.searchParams.get('uploadJSON') as string;
 
 	export let form;
 	const maxDays = 2;
@@ -139,10 +140,16 @@
 
 	onMount(() => {
 		// Checking for local storage
-		if (JSON.parse(editParam)) {
+		if (JSON.parse(editJSON)) {
 			const storedJSON = JSON.parse(localStorage.getItem('jsonToBeEdited') || '[]');
 			jsonData = storedJSON;
 			edit = true;
+			inputDateFormatter(); // Format date from ISO to normal value input standard
+		}
+
+		if (JSON.parse(uploadJSON)) {
+			const storedJSON = JSON.parse(localStorage.getItem('jsonToBeEdited') || '[]');
+			jsonData = storedJSON;
 			inputDateFormatter(); // Format date from ISO to normal value input standard
 		}
 	});
