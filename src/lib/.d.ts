@@ -4,6 +4,7 @@ export type PhotoXDay = {
 	events: {
 		label: string;
 		time: string[];
+		photowalk: boolean;
 	}[];
 };
 

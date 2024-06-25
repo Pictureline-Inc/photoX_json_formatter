@@ -8,7 +8,7 @@
 	const photoXDay: PhotoXDay = {
 		id: 0,
 		date: '',
-		events: [{ label: '', time: [] }]
+		events: [{ label: '', time: [], photowalk: false }]
 	};
 
 	$: jsonData = {
@@ -24,14 +24,14 @@
 			{
 				id: jsonData.data.length,
 				date: '',
-				events: [{ label: '', time: [] }]
+				events: [{ label: '', time: [], photowalk: false }]
 			}
 		];
 	}
 
 	function addNestedEvent(id: number) {
 		jsonData.data = jsonData.data.map((day) => {
-			if (day.id === id) day.events.push({ label: '', time: [] });
+			if (day.id === id) day.events.push({ label: '', time: [], photowalk: false });
 			return day;
 		});
 	}
@@ -48,7 +48,7 @@
 		jsonData.data = jsonData.data.map((day) => {
 			if (day.id === id) {
 				day.date = '';
-				day.events = [{ label: '', time: [] }];
+				day.events = [{ label: '', time: [], photowalk: false }];
 				document.querySelectorAll(`#day-${id} input`).forEach((node) => {
 					(node as HTMLInputElement).value = '';
 				});
@@ -217,6 +217,16 @@
 														/>
 													</svg>
 												</button>
+											</div>
+											<div class="form-control w-fit">
+												<label class="label cursor-pointer">
+													<span class="label-text mr-4">Photowalk Event</span>
+													<input
+														type="checkbox"
+														bind:checked={e.photowalk}
+														class="checkbox checkbox-primary checkbox-xs"
+													/>
+												</label>
 											</div>
 										</li>
 									{/each}
