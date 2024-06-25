@@ -5,7 +5,9 @@ import { browser } from '$app/environment';
 
 const defaultVal = browser ? localStorage.getItem('jsonToBeEdited') : '';
 
-export const jsonToBeEdited = writable<PhotoXJSON>(defaultVal ? JSON.parse(defaultVal) : undefined);
+export const jsonToBeEdited = writable<PhotoXJSON>(
+	defaultVal ? (defaultVal ? JSON.parse(defaultVal) : defaultVal) : undefined
+);
 
 jsonToBeEdited.subscribe((value) => {
 	if (!browser) return;
