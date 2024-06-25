@@ -67,7 +67,12 @@
 											'pt-0'}"
 										class:border-b-[1px]={day.events.length - 1 !== i && true}
 									>
-										<p>{e.label}</p>
+										<p>
+											{e.label}
+											{#if e.photowalk}
+												— <span class="text-primary">Photowalk</span>
+											{/if}
+										</p>
 										<p class="flex gap-2">
 											{#each e.time as time, ti}
 												<span>

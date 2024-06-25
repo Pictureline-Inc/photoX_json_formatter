@@ -45,7 +45,9 @@
 							class="hover:cursor-pointer hover:bg-base-200 transition-colors duration-200 ease-in-out"
 						>
 							<th>{i}</th>
-							<td>{data.name}</td>
+							<td>
+								{data.name}
+							</td>
 							<td>{data.data.length}</td>
 							<td>
 								{new Intl.DateTimeFormat(navigator.language, {

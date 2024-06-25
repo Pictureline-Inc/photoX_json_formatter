@@ -12,3 +12,4 @@ export type PhotoXJSON = {
 	name: string;
 	data: PhotoXDay[];
 };
+
