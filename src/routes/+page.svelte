@@ -94,10 +94,7 @@
 			day.date = day.date.replace(':00.000Z', '');
 			day.events = day.events.map((event) => {
 				event.time = event.time.map((time) => {
-					const isoString = time.replace(':00.000Z', '');
-					const date = new Date(isoString);
-					const timeString = date.toTimeString().split(' ')[0];
-					return timeString;
+					return time.substring(11, 16);
 				});
 				return event;
 			});
@@ -106,6 +103,8 @@
 	};
 
 	function formEnhance({ formElement, formData, action, cancel, submitter }: any) {
+		//! WAS GOING TO DO SOME SERVER SIDE FORM VALIDATION
+		// but screw it....
 		formData = new FormData();
 		formData.append('jsonData.data', JSON.stringify(jsonString, null, 4));
 		dateFormatter(); // Format date to ISO
@@ -135,50 +134,7 @@
 			jsonData = storedJSON;
 			edit = true;
 			inputDateFormatter(); // Format date from ISO to normal value input standard
-
-			/**
-			 * {
-  "name": "test",
-  "data": [
-    {
-      "id": 0,
-      "date": "2024-06-26T14:53",
-      "events": [
-        {
-          "label": "test",
-          "time": [
-            "15:53",
-            "17:53"
-          ],
-          "photowalk": false
-        }
-      ]
-    }
-  ]
-}
-			*/
 		}
-		/**
-		 * {
-  "name": "test",
-  "data": [
-    {
-      "id": 0,
-      "date": "2024-06-25T20:56:00.000Z",
-      "events": [
-        {
-          "label": "test",
-          "time": [
-            "2024-06-25T15:56:00.000Z",
-            "2024-06-25T16:57:00.000Z"
-          ],
-          "photowalk": false
-        }
-      ]
-    }
-  ]
-}
-		*/
 
 		console.log(jsonData);
 	});
