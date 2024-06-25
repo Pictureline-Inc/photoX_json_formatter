@@ -18,20 +18,31 @@
 	<div class="flex flex-col">
 		<section class="flex">
 			<div class="card bg-neutral p-4 flex-1">
-				<textarea
-					class="textarea textarea-primary resize-none"
-					placeholder="Paste JSON text here..."
-					rows="20"
-					bind:value={jsonSTR}
-				></textarea>
+				<label for="jsonString" class="w-full">
+					<span class="sr-only">JSON String</span>
+					<textarea
+						class="textarea textarea-primary resize-none w-full"
+						placeholder="Paste JSON text here..."
+						rows="20"
+						name="jsonString"
+						id="jsonString"
+						bind:value={jsonSTR}
+					></textarea>
+				</label>
 			</div>
 			<div class="divider divider-horizontal">OR</div>
 			<div class="card bg-neutral p-4 flex-1 h-fit">
-				<input
-					type="file"
-					class="file-input file-input-bordered file-input-primary w-full h-20"
-					bind:value={jsonFile}
-				/>
+				<label for="jsonFile">
+					<span class="sr-only">JSON File</span>
+					<input
+						name="jsonFile"
+						id="jsonFile"
+						type="file"
+						class="file-input file-input-bordered file-input-primary w-full h-20"
+						accept=".json"
+						bind:value={jsonFile}
+					/>
+				</label>
 			</div>
 		</section>
 
