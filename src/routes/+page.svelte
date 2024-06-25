@@ -15,6 +15,7 @@
 		events: [{ label: '', time: [], photowalk: false }]
 	};
 
+	$: edit = false;
 	$: jsonData = {
 		name: '',
 		data: [photoXDay]
@@ -112,6 +113,7 @@
 		if (JSON.parse(editParam)) {
 			const storedJSON = JSON.parse(localStorage.getItem('jsonToBeEdited') || '[]');
 			jsonData = storedJSON;
+			edit = true;
 		}
 	});
 </script>
@@ -267,7 +269,13 @@
 					>
 						+ Add Day
 					</button>
-					<button class="btn btn-sm btn-primary rounded">Generate JSON</button>
+					<button class="btn btn-sm btn-primary rounded">
+						{#if !edit}
+							Generate JSON
+						{:else}
+							Update JSON
+						{/if}
+					</button>
 				</footer>
 			</form>
 		{:else}
