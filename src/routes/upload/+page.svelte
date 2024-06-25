@@ -15,7 +15,7 @@
 
 	$: if (jsonSTR) {
 		try {
-			JSON.parse(jsonSTR);
+			if (jsonSTR) JSON.parse(jsonSTR);
 		} catch (error) {
 			errorMessage = 'Invalid JSON';
 			jsonPresent = false;
