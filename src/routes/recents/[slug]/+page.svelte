@@ -6,6 +6,7 @@
 	export let data: PhotoXJSON;
 
 	$: coppied = false;
+	$: console.log(data);
 
 	async function copyClipboard() {
 		coppied = true;
@@ -16,11 +17,23 @@
 		});
 	}
 
-	function formatTimeStr(time: string) {
-		const [hours, minutes] = time.split(':');
-		const suffix = parseInt(hours) >= 12 ? 'PM' : 'AM';
-		const formattedHours = parseInt(hours) % 12 || 12;
-		return `${formattedHours}:${minutes} ${suffix}`;
+	function formatTimeStr(time: string[]) {
+		return time
+			.map((t) => {
+				if (!t) return;
+				const [hours, minutes] = t.split(':');
+				const suffix = parseInt(hours) >= 12 ? 'PM' : 'AM';
+				const formattedHours = parseInt(hours) % 12 || 12;
+				return `${formattedHours}:${minutes} ${suffix}`;
+			})
+			.join(time[time.length - 1] ? ' — ' : '');
+
+		// if (!time) return;
+
+		// const [hours, minutes] = time.split(':');
+		// const suffix = parseInt(hours) >= 12 ? 'PM' : 'AM';
+		// const formattedHours = parseInt(hours) % 12 || 12;
+		// return `${formattedHours}:${minutes} ${suffix}`;
 	}
 
 	async function editJSON() {
@@ -106,14 +119,15 @@
 											{/if}
 										</p>
 										<p class="flex gap-2">
-											{#each e.time as time, ti}
+											{formatTimeStr(e.time)}
+											<!-- {#each e.time as time, ti}
 												<span>
 													{formatTimeStr(time)}
 												</span>
-												{#if ti === 0}
+												{#if e.time.length > 1 && ti === 0}
 													—
 												{/if}
-											{/each}
+											{/each} -->
 										</p>
 									</div>
 								</li>
