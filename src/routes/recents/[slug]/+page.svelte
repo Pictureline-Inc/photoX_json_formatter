@@ -16,7 +16,7 @@
 		});
 	}
 
-	function formatTimeStr(time) {
+	function formatTimeStr(time: string) {
 		const [hours, minutes] = time.split(':');
 		const suffix = parseInt(hours) >= 12 ? 'PM' : 'AM';
 		const formattedHours = parseInt(hours) % 12 || 12;
