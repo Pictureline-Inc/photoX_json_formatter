@@ -6,7 +6,6 @@
 	export let data: PhotoXJSON;
 
 	$: coppied = false;
-	$: console.log(data);
 
 	async function copyClipboard() {
 		coppied = true;
@@ -27,13 +26,6 @@
 				return `${formattedHours}:${minutes} ${suffix}`;
 			})
 			.join(time[time.length - 1] ? ' — ' : '');
-
-		// if (!time) return;
-
-		// const [hours, minutes] = time.split(':');
-		// const suffix = parseInt(hours) >= 12 ? 'PM' : 'AM';
-		// const formattedHours = parseInt(hours) % 12 || 12;
-		// return `${formattedHours}:${minutes} ${suffix}`;
 	}
 
 	async function editJSON() {
