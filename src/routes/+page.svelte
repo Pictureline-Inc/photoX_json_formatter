@@ -213,7 +213,6 @@
 													<input
 														name="{j.id}-event_endDate-{index}"
 														type="time"
-														required
 														bind:value={e.time[1]}
 														class="w-full max-w-xs"
 													/>
