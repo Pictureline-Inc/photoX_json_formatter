@@ -16,6 +16,13 @@
 		});
 	}
 
+	function formatTimeStr(time) {
+		const [hours, minutes] = time.split(':');
+		const suffix = parseInt(hours) >= 12 ? 'PM' : 'AM';
+		const formattedHours = parseInt(hours) % 12 || 12;
+		return `${formattedHours}:${minutes} ${suffix}`;
+	}
+
 	async function editJSON() {
 		$jsonToBeEdited = data as any;
 		await goto('/?editJSON=true');
@@ -101,11 +108,7 @@
 										<p class="flex gap-2">
 											{#each e.time as time, ti}
 												<span>
-													{new Intl.DateTimeFormat(navigator.language, {
-														hour: 'numeric',
-														minute: 'numeric',
-														hour12: true
-													}).format(new Date(time))}
+													{formatTimeStr(time)}
 												</span>
 												{#if ti === 0}
 													—

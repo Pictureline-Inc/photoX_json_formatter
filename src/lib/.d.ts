@@ -1,9 +1,9 @@
 export type PhotoXDay = {
 	id: number;
-	date: string | Date;
+	date: string | Date | number;
 	events: {
 		label: string;
-		time: string[];
+		time: any[];
 		photowalk: boolean;
 	}[];
 };

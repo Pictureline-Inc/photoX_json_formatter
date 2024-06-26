@@ -75,45 +75,12 @@
 		});
 	}
 
-	const dateFormatter = () => {
-		jsonData.data = jsonData.data.map((day, i) => {
-			// Creating date object from the Day's date for events & converting to ISO String
-			const date = new Date(day.date);
-			day.date = date.toISOString();
-			day.events = day.events.map((event) => {
-				// Handle the Time string formatting
-				event.time = event.time.map((time) => {
-					const [hours, minutes] = time.split(':');
-					date.setHours(parseInt(hours));
-					date.setMinutes(parseInt(minutes));
-					return date.toISOString();
-				});
-				return event;
-			});
-
-			return day;
-		});
-	};
-
-	const inputDateFormatter = () => {
-		jsonData.data = jsonData.data.map((day) => {
-			day.date = day.date.toString().replace(':00.000Z', '');
-			day.events = day.events.map((event) => {
-				event.time = event.time.map((time) => {
-					return time.substring(11, 16);
-				});
-				return event;
-			});
-			return day;
-		});
-	};
-
 	function formEnhance({ formElement, formData, action, cancel, submitter }: any) {
 		//! WAS GOING TO DO SOME SERVER SIDE FORM VALIDATION
 		// but screw it....
 		formData = new FormData();
 		formData.append('jsonData.data', JSON.stringify(jsonString, null, 4));
-		dateFormatter(); // Format date to ISO
+		// dateFormatter(); // Format date to ISO
 		// inputDateFormatter(); // Format date from ISO to normal value input standard
 		return async ({ _, update }: any) => {
 			// update({ ok: true });
@@ -146,13 +113,11 @@
 			const storedJSON = JSON.parse(localStorage.getItem('jsonToBeEdited') || '[]');
 			jsonData = storedJSON;
 			edit = true;
-			inputDateFormatter(); // Format date from ISO to normal value input standard
 		}
 
 		if (JSON.parse(uploadJSON)) {
 			const storedJSON = JSON.parse(localStorage.getItem('jsonToBeEdited') || '[]');
 			jsonData = storedJSON;
-			inputDateFormatter(); // Format date from ISO to normal value input standard
 		}
 	});
 </script>
@@ -204,7 +169,6 @@
 
 							<label for="{j.id}-date-{i}" class="form-control w-full max-w-xs">
 								<span class="label-text mb-3 text-lg font-medium">PhotoX Day - {i + 1}</span>
-
 								<input
 									name="{j.id}-date-{i}"
 									id="{j.id}-date-{i}"
