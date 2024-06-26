@@ -76,24 +76,28 @@
 	}
 
 	const dateFormatter = () => {
-		jsonData.data = jsonData.data.map((day) => {
-			day.date = new Date(day.date).toISOString();
+		jsonData.data = jsonData.data.map((day, i) => {
+			// Creating date object from the Day's date for events & converting to ISO String
+			const date = new Date(day.date);
+			day.date = date.toISOString();
 			day.events = day.events.map((event) => {
+				// Handle the Time string formatting
 				event.time = event.time.map((time) => {
-					const datePart = day.date.split('T')[0]; // Extract the date part from the ISO date
-					const dateTimeString = `${datePart}T${time}:00.000Z`; // Combine date and time
-					const isoString = new Date(dateTimeString).toISOString();
-					return isoString;
+					const [hours, minutes] = time.split(':');
+					date.setHours(parseInt(hours));
+					date.setMinutes(parseInt(minutes));
+					return date.toISOString();
 				});
 				return event;
 			});
+
 			return day;
 		});
 	};
 
 	const inputDateFormatter = () => {
 		jsonData.data = jsonData.data.map((day) => {
-			day.date = day.date.replace(':00.000Z', '');
+			day.date = day.date.toString().replace(':00.000Z', '');
 			day.events = day.events.map((event) => {
 				event.time = event.time.map((time) => {
 					return time.substring(11, 16);
@@ -110,12 +114,11 @@
 		formData = new FormData();
 		formData.append('jsonData.data', JSON.stringify(jsonString, null, 4));
 		dateFormatter(); // Format date to ISO
+		// inputDateFormatter(); // Format date from ISO to normal value input standard
 		return async ({ _, update }: any) => {
 			// update({ ok: true });
-
 			// Get current JSON Structs from local storage
 			const currentJSONStructs = JSON.parse(localStorage.getItem('photoXJSON') || '[]');
-
 			if (edit) {
 				const updatedJSONStruct = currentJSONStructs.map((s: any, i: number) => {
 					if (s.id === jsonData.id) {
@@ -132,7 +135,6 @@
 					localStorage.setItem('photoXJSON', JSON.stringify([...currentJSONStructs, jsonData]));
 				}
 			}
-
 			// Redirect to the recents page
 			await goto(`/recents/${jsonData.name}`);
 		};

@@ -1,6 +1,6 @@
 export type PhotoXDay = {
 	id: number;
-	date: string;
+	date: string | Date;
 	events: {
 		label: string;
 		time: string[];
@@ -13,4 +13,3 @@ export type PhotoXJSON = {
 	name: string;
 	data: PhotoXDay[];
 };
-

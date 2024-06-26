@@ -1,13 +1,10 @@
 // place files you want to import through the `$lib` alias in this folder.
 import { writable } from 'svelte/store';
-import type { PhotoXJSON } from './.d.ts';
 import { browser } from '$app/environment';
 
 const defaultVal = browser ? localStorage.getItem('jsonToBeEdited') : '';
 
-export const jsonToBeEdited = writable<PhotoXJSON>(
-	defaultVal ? (defaultVal ? JSON.parse(defaultVal) : defaultVal) : undefined
-);
+export const jsonToBeEdited = writable(defaultVal ? defaultVal : undefined);
 
 jsonToBeEdited.subscribe((value) => {
 	if (!browser) return;
